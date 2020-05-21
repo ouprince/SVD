@@ -10,7 +10,7 @@ class SVD(object):
     # K 表示分解矩阵 K 的维度 
     # learning_rate 学习率
     # lambda 正则化权重
-    def __init__(self,UI,learning_rate = 0.01, lambdax = 0.1, K = 100):
+    def __init__(self,UI,learning_rate = 0.005, lambdax = 0.5, K = 100):
         self.UI = UI # UI 矩阵，用 -1 代表 未知项
         self.learning_rate = learning_rate
         self.lambdax = lambdax
@@ -20,7 +20,7 @@ class SVD(object):
         self.Y = np.random.randn(self.K,self.I) # Y 矩阵
         self.res = None
     
-    def train(self,epochs = 10):
+    def train(self,epochs = 100):
         for epoch in range(epochs):
             # 计算相乘矩阵
             R = np.dot(self.X,self.Y)
