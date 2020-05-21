@@ -10,7 +10,7 @@ class SVD(object):
     # K 表示分解矩阵 K 的维度 
     # learning_rate 学习率
     # lambda 正则化权重
-    def __init__(self,UI,learning_rate = 0.05, lambdax = 0.1, K = 100):
+    def __init__(self,UI,learning_rate = 0.01, lambdax = 0.1, K = 100):
         self.UI = UI # UI 矩阵，用 -1 代表 未知项
         self.learning_rate = learning_rate
         self.lambdax = lambdax
@@ -20,17 +20,20 @@ class SVD(object):
         self.Y = np.random.randn(self.K,self.I) # Y 矩阵
         self.res = None
     
-    def train(self,epochs = 2000):
-        for i in range(epochs):
+    def train(self,epochs = 10):
+        for epoch in range(epochs):
             # 计算相乘矩阵
             R = np.dot(self.X,self.Y)
             # 计算误差矩阵 eui
             eui = self.UI - R
-            SSE = sum(sum(eui ** 2))
-            print("After %d epochs, The SSE = %.6f" %(i, SSE))
-            if i > 0 and SSE > SSE_YUAN:
+            SSE = 0
+            for u in range(self.U):
+                for i in range(self.I):
+                    if UI[u,i] != -1:SSE+=eui[u,i] ** 2
+            print("After %d epochs, The SSE = %.6f" %(epoch, SSE))
+            if epoch > 0 and SSE > SSE_YUAN:
                 self.learning_rate = 0.8 * self.learning_rate
-            SSE_YUAN = sum(sum(eui ** 2))
+            SSE_YUAN = SSE
             # 计算 puk 梯度 + 正则化 lambda , delta 为 X 的梯度矩阵
             delta_X = np.zeros((self.U,self.K))
             delta_Y = np.zeros((self.K,self.I))
